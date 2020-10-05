@@ -15,6 +15,8 @@ class Linklist{
         void selectLinklist();// 打印单链表
         int selectNumOfLinklist();//查询单链表的数量
         void deleteLinklist(int n);//删除第n个节点
+        void insertLinklist(int n,int value);//在第几个位置插入什么值
+        void destoryLinklist(); //销毁单链表
         //构造方法和析构方法
         Linklist();
         ~Linklist();
@@ -77,6 +79,7 @@ void Linklist::deleteLinklist(int n)
     }
     Node* p=head->next;
     Node* q;
+    n--;
     while(n--)
     {
         q=p;
@@ -87,7 +90,27 @@ void Linklist::deleteLinklist(int n)
     size--;
 
 };
+//在某个位置插入某个值
+void Linklist::insertLinklist(int n,int value)
+{
+    Node* p=head->next;
+    if(n>size)
+    {
+    printf("不存在的!\n");
+    }
+    n--;
+    while (n--)
+    {
+        p=p->next;
+    }
+    Node* tmp=new Node;
+    tmp->value=value;
+    tmp->next=p->next;
+    p->next=tmp;
+    size++;
+    head->value++;
 
+};
 int main()
 {
     Linklist tmp; //创建单链表对象,不加括号，默认是调用默认构造函数
@@ -107,5 +130,7 @@ int main()
    tmp.createLinklist();
    tmp.selectLinklist();
    tmp.deleteLinklist(4);
+   tmp.selectLinklist();
+   tmp.insertLinklist(3,89);
    tmp.selectLinklist();
 }
