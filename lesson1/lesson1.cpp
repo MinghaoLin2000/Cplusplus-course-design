@@ -93,7 +93,9 @@ void Linklist::deleteLinklist(int n)
 //在某个位置插入某个值
 void Linklist::insertLinklist(int n,int value)
 {
-    Node* p=head->next;
+    Node* p=head;
+    Node* tmp=new Node;
+    tmp->value=value;
     if(n>size)
     {
     printf("不存在的!\n");
@@ -103,14 +105,30 @@ void Linklist::insertLinklist(int n,int value)
     {
         p=p->next;
     }
-    Node* tmp=new Node;
-    tmp->value=value;
     tmp->next=p->next;
     p->next=tmp;
     size++;
     head->value++;
-
+    
 };
+//销毁单链表
+void Linklist::destoryLinklist()
+{
+     Node* p=head;
+     if(this->head==NULL)
+     {
+         cout<<"链表原本为空"<<endl;
+         return;
+     }
+    while(p)
+    {
+        Node* tmp=p->next;
+        free(p);
+        p=tmp;
+    }
+    printf("销毁链表成功");
+    
+}
 int main()
 {
     Linklist tmp; //创建单链表对象,不加括号，默认是调用默认构造函数
