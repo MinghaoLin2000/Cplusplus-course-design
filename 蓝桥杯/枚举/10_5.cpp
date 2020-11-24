@@ -2,7 +2,10 @@
 #include <string.h>
 using namespace std;
 
-
+struct a{
+    int a;
+    struct a* tmp;
+}
 
 unsigned char* RC4(unsigned char* C,unsigned char* key,int keylen,int length)
 {
