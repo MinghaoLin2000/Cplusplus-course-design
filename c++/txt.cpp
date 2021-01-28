@@ -1,22 +1,25 @@
 #include<iostream>
+#include<string>
 using namespace std;
-class Person{
-    private:
-    int m_age;
-    string m_name;
+//1.创建一个类，c++编译器会给每个类都添加至少3个函数
+// 默认构造（空实现）
+// 默认析构函数（空实现）
+// 拷贝构造（值拷贝）
+class Person
+{
     public:
-    void setName(string name)
+    int m_B;
+    static void func()
     {
-        m_name=name;
+        m_A=200;
+        cout<<"static void func调用"<<endl;
     }
-    string getName()
-    {
-        return m_name;
-    }
+    static int m_A;//静态成员变量
 };
+int Person::m_A=0;
 int main()
 {
-    Person s1;
-    s1.setName("234324");
-    cout<<s1.getName()<<endl;
+  Person::func();
+    Person::m_A=0; 
+
 }
