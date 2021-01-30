@@ -1,25 +1,50 @@
 #include<iostream>
 #include<string>
 using namespace std;
-//1.创建一个类，c++编译器会给每个类都添加至少3个函数
-// 默认构造（空实现）
-// 默认析构函数（空实现）
-// 拷贝构造（值拷贝）
-class Person
+//重载递增运算符
+//自定义整型
+class MyInteger
 {
+    //友元
+    friend ostream& operator<<(ostream& cout,MyInteger myint);
     public:
-    int m_B;
-    static void func()
+    MyInteger()
     {
-        m_A=200;
-        cout<<"static void func调用"<<endl;
+        m_Num=0;
     }
-    static int m_A;//静态成员变量
+    //重载前置 ++运算符
+    MyInteger& operator++()
+    {
+        m_Num++;
+        return *this;
+    }
+    //重载后置 ++运算符
+    //void operator(int) int 代表占位参数，可以用于区分前置和后置
+    MyInteger operator++(int)
+    {
+        //先 记录当时结果
+        MyInteger temp=*this;
+        //递增
+        m_Num++;
+        // 最后将记录结果作返回
+        return temp;
+    }
+    private :
+    int m_Num;
 };
-int Person::m_A=0;
+//重载下左移运算符
+ostream& operator<<(ostream& cout,MyInteger myint)
+{
+    cout<<myint.m_Num;
+    return cout;
+}
+void test01()
+{
+    MyInteger myint;
+    cout<<myint<<endl;
+}
+
 int main()
 {
-  Person::func();
-    Person::m_A=0; 
-
+    
 }
