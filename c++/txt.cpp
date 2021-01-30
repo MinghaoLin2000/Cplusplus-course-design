@@ -1,50 +1,62 @@
-#include<iostream>
-#include<string>
-using namespace std;
-//重载递增运算符
-//自定义整型
-class MyInteger
-{
-    //友元
-    friend ostream& operator<<(ostream& cout,MyInteger myint);
-    public:
-    MyInteger()
-    {
-        m_Num=0;
-    }
-    //重载前置 ++运算符
-    MyInteger& operator++()
-    {
-        m_Num++;
-        return *this;
-    }
-    //重载后置 ++运算符
-    //void operator(int) int 代表占位参数，可以用于区分前置和后置
-    MyInteger operator++(int)
-    {
-        //先 记录当时结果
-        MyInteger temp=*this;
-        //递增
-        m_Num++;
-        // 最后将记录结果作返回
-        return temp;
-    }
-    private :
-    int m_Num;
-};
-//重载下左移运算符
-ostream& operator<<(ostream& cout,MyInteger myint)
-{
-    cout<<myint.m_Num;
-    return cout;
-}
-void test01()
-{
-    MyInteger myint;
-    cout<<myint<<endl;
-}
-
-int main()
-{
-    
-}
+#include <stdio.h>  
+#include <stdint.h>  
+#define DELTA 0x9e3779b9  
+#define MX (((z>>5^y<<2) + (y>>3^z<<4)) ^ ((sum^y) + (key[(p&3)^e] ^ z)))  
+  
+void btea(uint32_t *v, int n, uint32_t const key[4])  
+{  
+    uint32_t y, z, sum;  
+    unsigned p, rounds, e;  
+    if (n > 1)            /* Coding Part */  
+    {  
+        rounds = 6 + 52/n;  
+        sum = 0;  
+        z = v[n-1];  
+        do  
+        {  
+            sum += DELTA;  
+            e = (sum >> 2) & 3;  
+            for (p=0; p<n-1; p++)  
+            {  
+                y = v[p+1];  
+                z = v[p] += MX;  
+            }  
+            y = v[0];  
+            z = v[n-1] += MX;  
+        }  
+        while (--rounds);  
+    }  
+    else if (n < -1)      /* Decoding Part */  
+    {  
+        n = -n;  
+        rounds = 6 + 52/n;  
+        sum = rounds*DELTA;  
+        y = v[0];  
+        do  
+        {  
+            e = (sum >> 2) & 3;  
+            for (p=n-1; p>0; p--)  
+            {  
+                z = v[p-1];  
+                y = v[p] -= MX;  
+            }  
+            z = v[n-1];  
+            y = v[0] -= MX;  
+            sum -= DELTA;  
+        }  
+        while (--rounds);  
+    }  
+}  
+  
+  
+int main()  
+{  
+    uint32_t v[35]= {1, 2, 3,4, 5,6,7,8,9,1, 2, 3,4, 5,6,7,8,9,1, 2, 3,4, 5,6,7,8,9,1, 2, 3,4, 5,6,7,8};
+    uint32_t const k[4]= {1,2,3,4};  
+    int n= 35; //n的绝对值表示v的长度，取正表示加密，取负表示解密  
+    // v为要加密的数据是两个32位无符号整数  
+    // k为加密解密密钥，为4个32位无符号整数，即密钥长度为128位  
+    btea(v, n, k);  
+    printf("解密后的数据：%u %u\n",v[0],v[1]);  
+    return 0;  
+}  
