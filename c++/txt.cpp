@@ -50,13 +50,19 @@ void btea(uint32_t *v, int n, uint32_t const key[4])
   
   
 int main()  
-{  
-    uint32_t v[35]= {1, 2, 3,4, 5,6,7,8,9,1, 2, 3,4, 5,6,7,8,9,1, 2, 3,4, 5,6,7,8,9,1, 2, 3,4, 5,6,7,8};
+{ 
+    uint32_t v[35]={
+    0xE74EB323, 0xB7A72836, 0x59CA6FE2, 0x967CC5C1, 0xE7802674, 0x3D2D54E6, 0x8A9D0356, 0x99DCC39C, 
+    0x7026D8ED, 0x6A33FDAD, 0xF496550A, 0x5C9C6F9E, 0x1BE5D04C, 0x6723AE17, 0x5270A5C2, 0xAC42130A, 
+    0x84BE67B2, 0x705CC779, 0x5C513D98, 0xFB36DA2D, 0x22179645, 0x5CE3529D, 0xD189E1FB, 0xE85BD489, 
+    0x73C8D11F, 0x54B5C196, 0xB67CB490, 0x2117E4CA, 0x9DE3F994, 0x2F5AA1AA, 0xA7E801FD, 0xC30D6EAB, 
+    0x1BADDC9C, 0x3453B04A, 0x00A406F9
+};
     uint32_t const k[4]= {1,2,3,4};  
     int n= 35; //n的绝对值表示v的长度，取正表示加密，取负表示解密  
     // v为要加密的数据是两个32位无符号整数  
     // k为加密解密密钥，为4个32位无符号整数，即密钥长度为128位  
-    btea(v, n, k);  
-    printf("解密后的数据：%u %u\n",v[0],v[1]);  
+    btea(v,-35, k);  
+    printf("解密后的数据：%x %x\n",v[0],v[1]);  
     return 0;  
 }  
