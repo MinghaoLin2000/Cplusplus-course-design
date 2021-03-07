@@ -284,7 +284,7 @@ int main()
     for (size_t i = 0; i < 16; i++) {
         int isOk = 0;
         for (size_t i1 = 0; i1 < len&&!isOk; i1++) {
-            printf("%d %d %s\n",i, i1, es);
+           // printf("%d %d %s\n",i1,i,es);
             fflush(stdout);
             for (size_t i2 = 0; i2 < len ; i2++) {
                 for (size_t i3 = 0; i3 < len; i3++) {
@@ -294,14 +294,15 @@ int main()
                         es[1] = dic[i2];
                         es[2] = dic[i3];
                         es[3] = dic[i4];
+                        printf("%d %d %s\n",i1,i,es);
                         spreadByte((EditStru*)es, res);
                         /*if (!strncmp(es, "abcd", 4)) {
                             printArray("res", (uint8_t*)res, 256);
                             printArray("cmp", (uint8_t*)cmpData, 8);
                         }*/
-						printf("yenkoc happy");
                         if (!memcmp(res, &cmpData[i*32], 32)) {
                             printf("%s\n", es);
+                            exit(0);
                             printArray("flag4", (uint8_t*)es, 32);
                             memcpy(&flag[i * 4], es, 4);
                             fflush(stdout);
