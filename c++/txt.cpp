@@ -48,7 +48,8 @@ void dfs(uint16_t *state,size_t v4,size_t v5,char *flag)
     size_t len=strlen(flag);
     uint16_t * nnstate=(uint16_t*)alloca(sizeof(wa));
     char *nnflag=(char*)alloca(len+1);
-    memcpy(nnflag,flag,len+1);
+    memcpy(nnflag,flag,len+1
+    );
     memcpy(nnstate,state,sizeof(wa));
     dfs(nnstate,v4+1,v5,nnflag);
     char *nflag=(char*)alloca(len+3);
