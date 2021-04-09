@@ -4,91 +4,56 @@
 #include<queue>
 #include<cstdio>
 using namespace std;
-typedef long long int ll;
-
-const int maxn=(1<<16)-1;
-const int inf=0x3f3f3f3f;
-
-queue<int> que;
-int vis[maxn+10];
-int step;
-int change(unsigned int x,int i,int j)
+void decipher(unsigned int num_rounds, uint32_t v[2], uint32_t const key[4]) {  
+    unsigned int i;  
+    uint32_t v0=v[0], v1=v[1], delta=0x12345678, sum=delta*num_rounds;  
+    for (i=0; i < num_rounds; i++) {  
+        v1 -= (((v0 << 4) ^ (v0 >> 5)) + v0) ^ (sum + key[(sum>>11) & 3]);  
+        sum -= delta;  
+        v0 -= (((v1 << 4) ^ (v1 >> 5)) + v1) ^ (sum + key[sum & 3]);  
+    }  
+    v[0]=v0; v[1]=v1;  
+}  
+uint32_t const keys[4]={0x00010203,0x04050607,0x08090A0B,0x0C0D0E0F};
+void cipher_fuck(unsigned int *c_1,unsigned int *c_2)
 {
-    int k;
-    k=(1<<(i*4+j));
-    x^=k;
-    if(i-1>=0)
+    unsigned int flow_num=0;
+    unsigned int a,b;
+    unsigned c1=*c_1,c2=*c_2;
+    unsigned int flow[40];
+    for(int i=0;i<33;i++)
     {
-        k=(1<<(4*(i-1)+j));
-        x^=k;
+        flow[i]=flow_num;
+        flow_num+=0x12345678;
     }
-    if(i+1<4)
+    for(int i=32;i>0;i--)
     {
-        k=(1<<(4*(i+1)+j));
-        x^=k;
+        a=c2;
+        b=c1;
+        c1=b-((a+((a>>5)^(a<<4)))^(flow[i]+keys[(flow[i]>>11)%4]));
+        c2=a-((c1+((c1>>5)^(c1<<4)))^(flow[i-1]+keys[flow[i-1]%4]));
     }
-    if(j+1<4)
-    {
-        k=(1<<(4*i+j+1));
-        x^=k;
-    }
-    if(j-1>=0)
-    {
-        k=(1<<(4*i+j-1));
-        x^=k;
-    }
-    return x;
-}
-int bfs(int state)
-{
-    
-    while(!que.empty()) que.pop();
-    que.push(state);
-    while(!que.empty())
-    {
-        int t=que.size();
-        que.pop();
-        for(int i=0;i<t;i++)
-        {
-            int temp=que.front();
-            if(temp==0||temp==maxn||step>16)
-            {
-                return step;
-            }
-            for(int x=0;x<16;x++)
-            {
-                for(int y=0;y<16;y++)
-                {
-                    int w=change(temp,x,y);
-                    if(!vis[w])
-                    que.push(w);
-
-                }
-            }
-        }
-        step++;
-
-    }
-    return step;
+    *c_1=c1;
+    *c_2=c2;
 }
 int main()
 {
-    int state=0;
-    char s[10];
-    int k=0;
-    for(int i=0; i<4; i++)
-    {
-        scanf("%s",s);
-        for(int j=0; j<4; j++)
-        {
-            if(s[j]=='b')
-                state+=(1<<k);
-            k++;
-        }
-    }
-    int ans=bfs(state);
-    if(ans>16) printf("Impossible\n");
-    else printf("%d\n",ans);
 
-    return 0;
+uint32_t v[]={0x0EB7A306,0x423A8EB5,0x3BFC49CD,0x39B11F55};  
+    uint32_t const k[4]={0x00010203,0x04050607,0x08090A0B,0x0C0D0E0F};  
+    unsigned int r=32;//num_rounds建议取值为32  
+   // cipher_fuck(&v[0],&v[1]);
+    //cipher_fuck(&v[2],&v[3]);
+    //printf("解密后的数据：%u %u\n",v[0],v[1]); 
+    //printf("解密后的数据：%u %u\n",v[2],v[3]); 
+    // v为要加密的数据是两个32位无符号整数  
+    // k为加密解密密钥，为4个32位无符号整数，即密钥长度为128位  
+    //printf("加密前原始数据：%u %u\n",v[0],v[1]);  
+    //encipher(r, v, k);  
+    //printf("加密后的数据：%u %u\n",v[0],v[1]);  
+    decipher(r, v, k);  
+    printf("解密后的数据：%u %u\n",v[0],v[1]);  
+    decipher(r,&v[2],k);
+    printf("解密后的数据：%u %u\n",v[2],v[3]); 
+    return 0;  
 }
