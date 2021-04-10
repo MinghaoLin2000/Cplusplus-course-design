@@ -157,3 +157,4 @@ long file_size(const char *filename) //读取文件长度
     fclose(fp);
     return size;
 }
+kk
